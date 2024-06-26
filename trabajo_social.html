@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cuestionario de Trabajo Social</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+            background-image: url('img/WhatsApp%20Image%202024-05-14%20at%2012.34.11%20PM.jpeg'); /* Cambiar 'background.jpg' por tu imagen de fondo */
+            background-size: cover;
+            background-position: center;
+        }
+        .container {
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.8); /* Fondo semi-transparente para mejor legibilidad */
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        label {
+            display: block;
+            margin-bottom: 10px;
+            text-align: left;
+        }
+        input[type="text"] {
+            width: calc(100% - 20px);
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        button {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            border-radius: 4px;
+            margin-top: 10px;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        .question {
+            margin-top: 30px;
+            text-align: left;
+        }
+        .result {
+            margin-top: 30px;
+            text-align: left;
+            background: #f0f0f0;
+            padding: 20px;
+            border-radius: 8px;
+        }
+        .result h2 {
+            margin-top: 0;
+        }
+        .result p {
+            margin-bottom: 10px;
+        }
+        .result ul {
+            margin-top: 10px;
+            padding-left: 20px;
+        }
+        .download-btn {
+            background-color: #28a745;
+            margin-top: 20px;
+        }
+        .download-btn:hover {
+            background-color: #218838;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 style="text-align: center; color: #333;">Cuestionario de Trabajo Social</h1>
+        <form id="quizForm">
+            <label for="name">Nombre:</label>
+            <input type="text" id="name" name="name" required>
+            
+            <div class="question">
+                <p>1. ¿Cuál es el objetivo principal del trabajo social en un entorno comunitario?</p>
+                <label><input type="radio" name="q1" value="a"> a) Proporcionar servicios médicos directos.</label><br>
+                <label><input type="radio" name="q1" value="b"> b) Mejorar la calidad de vida y bienestar social.</label><br>
+                <label><input type="radio" name="q1" value="c"> c) Aplicar estrategias de marketing para organizaciones sin fines de lucro.</label><br>
+            </div>
+            
+            <div class="question">
+                <p>2. ¿Cuál es un ejemplo de intervención típica en trabajo social con familias?</p>
+                <label><input type="radio" name="q2" value="a"> a) Prescripción de medicamentos para problemas emocionales.</label><br>
+                <label><input type="radio" name="q2" value="b"> b) Facilitación de terapia familiar y mediación de conflictos.</label><br>
+                <label><input type="radio" name="q2" value="c"> c) Asistencia en la búsqueda de empleo para individuos.</label><br>
+            </div>
+            
+            <div class="question">
+                <p>3. ¿Cuál es una habilidad importante para un trabajador social que trabaja con comunidades diversas?</p>
+                <label><input type="radio" name="q3" value="a"> a) Sensibilidad cultural y competencia intercultural.</label><br>
+                <label><input type="radio" name="q3" value="b"> b) Conocimiento avanzado de contabilidad y finanzas.</label><br>
+                <label><input type="radio" name="q3" value="c"> c) Experiencia en técnicas avanzadas de programación informática.</label><br>
+            </div>
+
+            <button type="button" onclick="showResults()">Ver resultados</button>
+
+            <div id="resultsContainer" style="display: none;" class="result">
+                <h2>Resultados del cuestionario para <span id="resultName"></span></h2>
+                <p id="resultDateTime"></p>
+                <p id="resultScore"></p>
+                <h3>Respuestas incorrectas:</h3>
+                <ul id="incorrectAnswers"></ul>
+                <button type="button" class="download-btn" onclick="downloadPDF()">Descargar PDF</button>
+            </div>
+        </form>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
+    <script>
+        function showResults() {
+            const name = document.getElementById('name').value;
+            const q1 = document.querySelector('input[name="q1"]:checked');
+            const q2 = document.querySelector('input[name="q2"]:checked');
+            const q3 = document.querySelector('input[name="q3"]:checked');
+
+            if (!name || !q1 || !q2 || !q3) {
+                alert('Por favor responde todas las preguntas y proporciona tu nombre.');
+                return;
+            }
+
+            // Calcular calificación
+            let score = 0;
+            if (q1.value === 'b') score++;
+            if (q2.value === 'b') score++;
+            if (q3.value === 'a') score++;
+            const totalQuestions = 3;
+            const percentage = (score / totalQuestions) * 100;
+
+            // Crear objeto con los detalles de la calificación
+            const quizResult = {
+                name: name,
+                score: score,
+                totalQuestions: totalQuestions,
+                percentage: percentage.toFixed(2),
+                dateTime: new Date().toLocaleString(),
+                incorrectAnswers: []
+            };
+
+            // Detectar respuestas incorrectas
+            if (q1.value !== 'b') {
+                quizResult.incorrectAnswers.push({
+                    question: "1. ¿Cuál es el objetivo principal del trabajo social en un entorno comunitario?",
+                    correctAnswer: "b",
+                    userAnswer: q1.value
+                });
+            }
+            if (q2.value !== 'b') {
+                quizResult.incorrectAnswers.push({
+                    question: "2. ¿Cuál es un ejemplo de intervención típica en trabajo social con familias?",
+                    correctAnswer: "b",
+                    userAnswer: q2.value
+                });
+            }
+            if (q3.value !== 'a') {
+                quizResult.incorrectAnswers.push({
+                    question: "3. ¿Cuál es una habilidad importante para un trabajador social que trabaja con comunidades diversas?",
+                    correctAnswer: "a",
+                    userAnswer: q3.value
+                });
+            }
+
+            // Mostrar resultados en la página
+            document.getElementById('resultName').textContent = quizResult.name;
+            document.getElementById('resultDateTime').textContent = `Fecha y Hora: ${quizResult.dateTime}`;
+            document.getElementById('resultScore').textContent = `Calificación: ${quizResult.score}/${quizResult.totalQuestions} (${quizResult.percentage}%)`;
+
+            const incorrectAnswersList = document.getElementById('incorrectAnswers');
+            incorrectAnswersList.innerHTML = '';
+            quizResult.incorrectAnswers.forEach(answer => {
+                const li = document.createElement('li');
+                li.textContent = `${answer.question}: Tu respuesta: ${answer.userAnswer}. Respuesta correcta: ${answer.correctAnswer}`;
+                incorrectAnswersList.appendChild(li);
+            });
+
+            // Mostrar contenedor de resultados
+            document.getElementById('resultsContainer').style.display = 'block';
+        }
+
+        function downloadPDF() {
+            const { jsPDF } = window.jspdf;
+            const name = document.getElementById('resultName').textContent;
+            const dateTime = document.getElementById('resultDateTime').textContent;
+            const score = document.getElementById('resultScore').textContent;
+            const incorrectAnswers = Array.from(document.getElementById('incorrectAnswers').getElementsByTagName('li')).map(item => item.textContent);
+
+            const doc = new jsPDF();
+
+            doc.setFontSize(18);
+            doc.text(20, 20, `Resultado del cuestionario para ${name}`);
+            
+            doc.setFontSize(14);
+            doc.text(20, 30, dateTime);
+            doc.text(20, 40, score);
+
+            doc.setFontSize(12);
+            let y = 50;
+            incorrectAnswers.forEach(answer => {
+                if (y > 280) {
+                    doc.addPage();
+                    y = 20;
+                }
+                doc.text(20, y, answer);
+                y += 10;
+            });
+
+            doc.save(`Resultados_Cuestionario_${name}.pdf`);
+        }
+    </script>
+</body>
+</html>

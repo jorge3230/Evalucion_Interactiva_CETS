@@ -1,0 +1,126 @@
+body {
+    font-family: 'Arial', sans-serif;
+    line-height: 1.6;
+    margin: 0;
+    padding: 0;
+    background-image: url('img/WhatsApp%20Image%202024-05-14%20at%2012.34.11%20PM.jpeg'); /* Cambiar 'background.jpg' por tu imagen de fondo */
+    background-size: cover;
+    background-position: center;
+    color: #333;
+}
+
+.container {
+    max-width: 800px;
+    margin: 50px auto;
+    padding: 20px;
+    background: rgba(255, 255, 255, 0.9); /* Fondo semi-transparente para mejor legibilidad */
+    border-radius: 15px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    transition: transform 0.3s ease-in-out, background 0.3s ease-in-out;
+}
+
+.container:hover {
+    transform: scale(1.02);
+    background: rgba(255, 255, 255, 0.95);
+}
+
+h1 {
+    text-align: center;
+    color: #007bff;
+    margin-bottom: 30px;
+    font-size: 2.5em;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+label {
+    display: block;
+    margin-bottom: 10px;
+    text-align: left;
+    font-size: 1.1em;
+}
+
+input[type="text"] {
+    width: calc(100% - 20px);
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #007bff;
+    border-radius: 4px;
+    transition: border-color 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+}
+
+input[type="text"]:focus {
+    border-color: #0056b3;
+    box-shadow: 0 0 5px rgba(0, 86, 179, 0.3);
+}
+
+button {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    font-size: 1.1em;
+    cursor: pointer;
+    border-radius: 4px;
+    margin-top: 20px;
+    transition: background-color 0.3s ease-in-out, transform 0.3s ease-in-out;
+}
+
+button:hover {
+    background-color: #0056b3;
+    transform: translateY(-3px);
+}
+
+button:disabled {
+    background-color: #cccccc;
+    cursor: not-allowed;
+}
+
+.question {
+    margin-top: 30px;
+    text-align: left;
+    padding: 15px;
+    background: rgba(255, 255, 255, 0.8);
+    border-left: 4px solid #007bff;
+    border-radius: 8px;
+    transition: background 0.3s ease-in-out;
+}
+
+.question:hover {
+    background: rgba(255, 255, 255, 0.9);
+}
+
+.result {
+    margin-top: 30px;
+    background: rgba(240, 240, 240, 0.9);
+    padding: 20px;
+    border-radius: 15px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.result h2 {
+    margin-top: 0;
+    color: #007bff;
+    font-size: 2em;
+    text-align: center;
+}
+
+.result p, .result ul {
+    margin: 10px 0;
+    font-size: 1.1em;
+}
+
+.download-btn {
+    background-color: #28a745;
+    margin-top: 20px;
+    padding: 10px 20px;
+    border: none;
+    color: white;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease-in-out, transform 0.3s ease-in-out;
+}
+
+.download-btn:hover {
+    background-color: #218838;
+    transform: translateY(-3px);
+}

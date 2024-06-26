@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cuestionario de Serología</title>
+        <link rel="stylesheet" href="styles.css"> <!-- Enlace al archivo CSS externo -->
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+            background-color: #f0f0f0;
+        }
+        .container {
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.8);
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        label {
+            display: block;
+            margin-bottom: 10px;
+        }
+        input[type="text"] {
+            width: calc(100% - 20px);
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        button {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            border-radius: 4px;
+            margin-top: 10px;
+        }
+        button:disabled {
+            background-color: #cccccc;
+            cursor: not-allowed;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        .question {
+            margin-top: 30px;
+        }
+        .result {
+            margin-top: 30px;
+            background: #f0f0f0;
+            padding: 20px;
+            border-radius: 8px;
+        }
+        .result h2 {
+            margin-top: 0;
+        }
+        .result p {
+            margin-bottom: 10px;
+        }
+        .result ul {
+            margin-top: 10px;
+            padding-left: 20px;
+        }
+        .download-btn {
+            background-color: #28a745;
+            margin-top: 20px;
+            padding: 10px 20px;
+            border: none;
+            color: white;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .download-btn:hover {
+            background-color: #218838;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 style="text-align: center; color: #333;">Cuestionario de Serología</h1>
+        <form id="quizForm" onsubmit="return validateForm()">
+            <label for="name">Nombre:</label>
+            <input type="text" id="name" name="name" required>
+            
+            <div class="question">
+                <p>1. ¿Cuáles agentes infecciosos son los que se detectan a través de las pruebas realizadas en el área?</p>
+                <label><input type="radio" name="q1" value="a" required> a) Staphylococcus aureus y Streptococcus pyogenes.</label><br>
+                <label><input type="radio" name="q1" value="b"> b) Treponema pallidum, Virus B de la hepatitis, Virus C de la hepatitis, Virus de la inmunodeficiencia humana tipos 1 y 2, y Trypanosoma cruzi.</label><br>
+                <label><input type="radio" name="q1" value="c"> c) Escherichia coli y Salmonella enterica.</label><br>
+            </div>
+            
+            <div class="question">
+                <p>2. ¿Cuáles son las pruebas serológicas obligatorias que se deben realizar a las unidades de sangre donada?</p>
+                <label><input type="radio" name="q2" value="a" required> a) Prueba de Coombs y prueba de Anticuerpos no treponemicos</label><br>
+                <label><input type="radio" name="q2" value="b"> b) Detección de VIH, hepatitis B y C, sífilis, Chagas y Brucella.</label><br>
+                <label><input type="radio" name="q2" value="c"> c) Detección de malaria y dengue</label><br>
+            </div>
+            
+            <div class="question">
+                <p>3. Para que el banco de sangre autorice el uso terapéutico de las unidades de sangre y componentes sanguíneos ¿Cómo deben ser los resultados de las pruebas?</p>
+                <label><input type="radio" name="q3" value="a" required> a) Deberán contar con resultados positivos</label><br>
+                <label><input type="radio" name="q3" value="b"> b) Deberán contar con resultados negativos</label><br>
+                <label><input type="radio" name="q3" value="c"> c) No se necesita informacion.</label><br>
+            </div>
+            
+            <div class="question">
+                <p>4. ¿Qué sucede cuando una muestra de las pruebas arroja un resultado reactivo?</p>
+                <label><input type="radio" name="q4" value="a" required> a) Se autoriza el uso de la unidad de sangre.</label><br>
+                <label><input type="radio" name="q4" value="b"> b) Se descarta la unidad de sangre y se realiza una nueva prueba.</label><br>
+                <label><input type="radio" name="q4" value="c"> c) Se entrega la unidad de sangre sin más pruebas.</label><br>
+            </div>
+            
+            <div class="question">
+                <p>5. ¿Qué tipo de personas son consideradas de riesgo para la detección de Brucella?</p>
+                <label><input type="radio" name="q5" value="a" required> a) Las que consumen carne bien cocida.</label><br>
+                <label><input type="radio" name="q5" value="b"> b) Las que no tienen contacto con animales.</label><br>
+                <label><input type="radio" name="q5" value="c"> c) Las que ingieren productos lácteos no pasteurizados o trabajan con animales.</label><br>
+            </div>
+            
+            <div class="question">
+                <p>6. ¿Qué medidas de bioseguridad se deben implementar en el área de serología para prevenir la contaminación cruzada y garantizar la seguridad del personal y las muestras?</p>
+                <label><input type="radio" name="q6" value="a" required> a) Uso de equipo de protección personal (EPP) y limpieza ocasional.</label><br>
+                <label><input type="radio" name="q6" value="b"> b) Desinfección regular de superficies, manejo adecuado de residuos biológicos y técnicas asépticas.</label><br>
+                <label><input type="radio" name="q6" value="c"> c) No es necesario implementar medidas de bioseguridad.</label><br>
+            </div>
+            
+            <div class="question">
+                <p>7. ¿Cómo se registran y documentan los resultados de las pruebas serológicas, y qué información es crucial incluir en estos registros según la norma?</p>
+                <label><input type="radio" name="q7" value="a" required> a) No es necesario registrar los resultados.</label><br>
+                <label><input type="radio" name="q7" value="b"> b) Se registran en sistemas electrónicos seguros e incluyen identificación del donante, resultados de las pruebas, fechas y acciones tomadas en caso de resultados reactivos.</label><br>
+                <label><input type="radio" name="q7" value="c"> c) Se registran solo los resultados negativos.</label><br>
+            </div>
+            
+            <div class="question">
+                <p>8. ¿Cuál es el protocolo para manejar un incidente de exposición accidental a sangre en el área de serología?</p>
+                <label><input type="radio" name="q8" value="a" required> a) Reportar el incidente solo si es grave.</label><br>
+                <label><input type="radio" name="q8" value="b"> b) Detener el trabajo, lavar el área afectada, reportar el incidente y buscar atención médica.</label><br>
+                <label><input type="radio" name="q8" value="c"> c) No es necesario reportar incidentes menores.</label><br>
+            </div>
+            
+            <div class="question">
+                <p>9. ¿Cómo se asegura de que los reactivos y equipos utilizados en las pruebas serológicas estén dentro de su periodo de validez y funcionando correctamente?</p>
+                <label><input type="radio" name="q9" value="a" required> a) Confiando en el proveedor de los reactivos.</label><br>
+                <label><input type="radio" name="q9" value="b"> b) Realizando controles de calidad, verificando fechas de caducidad y realizando mantenimiento preventivo y calibración.</label><br>
+                <label><input type="radio" name="q9" value="c"> c) Usando los reactivos hasta que se terminen.</label><br>
+            </div>
+            
+            <div class="question">
+                <p>10. ¿Qué criterio se utiliza para decidir si una unidad de sangre es adecuada para uso terapéutico después de las pruebas serológicas?</p>
+                <label><input type="radio" name="q10" value="a" required> a) No es necesario realizar pruebas serológicas para determinar la adecuación de la unidad de sangre.</label><br>
+                <label><input type="radio" name="q10" value="b"> b) La unidad debe ser no reactiva en todas las pruebas serológicas obligatorias.</label><br>
+                <label><input type="radio" name="q10" value="c"> c) Todas las unidades de sangre son adecuadas para uso terapéutico.</label><br>
+            </div>
+            
+            <button type="submit" id="showResultsBtn">Ver resultados</button>
+        </form>
+        
+        <div id="results" class="result" style="display: none;">
+            <h2>Resultados del cuestionario</h2>
+            <p>Nombre: <span id="resultName"></span></p>
+            <p>Fecha y hora: <span id="resultDateTime"></span></p>
+            <p>Puntuación: <span id="resultScore"></span>/10</p>
+            <p>Respuestas:</p>
+            <ul id="answersList"></ul>
+            <button class="download-btn" onclick="downloadPDF()">Descargar resultados como PDF</button>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.3.1/jspdf.umd.min.js"></script>
+    <script>
+        const correctAnswers = ['b', 'b', 'b', 'b', 'c', 'b', 'b', 'b', 'b', 'b'];
+
+        function showResults() {
+            const name = document.getElementById('name').value;
+            const dateTime = new Date().toLocaleString('es-ES');
+            let score = 0;
+            const answersList = document.getElementById('answersList');
+            answersList.innerHTML = ''; // Limpiar lista de respuestas
+
+            const questions = document.querySelectorAll('.question');
+            questions.forEach((question, index) => {
+                const selectedOption = question.querySelector('input:checked');
+                const correctAnswer = correctAnswers[index];
+                const answerText = selectedOption ? selectedOption.parentElement.textContent.trim() : 'No respondida';
+                const listItem = document.createElement('li');
+                listItem.textContent = `Pregunta ${index + 1}: ${answerText} (${selectedOption && selectedOption.value === correctAnswer ? 'Correcta' : 'Incorrecta'})`;
+                answersList.appendChild(listItem);
+
+                if (selectedOption && selectedOption.value === correctAnswer) {
+                    score++;
+                }
+            });
+
+            document.getElementById('resultName').textContent = name;
+            document.getElementById('resultDateTime').textContent = dateTime;
+            document.getElementById('resultScore').textContent = score;
+
+            document.getElementById('results').style.display = 'block';
+            document.getElementById('quizForm').reset(); // Limpiar el formulario después de mostrar resultados
+            document.getElementById('showResultsBtn').disabled = true; // Deshabilitar el botón de mostrar resultados
+        }
+
+        async function downloadPDF() {
+            const { jsPDF } = window.jspdf;
+            const name = document.getElementById('resultName').textContent;
+            const dateTime = document.getElementById('resultDateTime').textContent;
+            const score = document.getElementById('resultScore').textContent;
+            const answers = Array.from(document.querySelectorAll('#answersList li')).map(li => li.textContent).join("\n");
+
+            const doc = new jsPDF();
+            doc.setFontSize(10.5); // Ajustar el tamaño de la fuente
+            doc.text(`Resultados del cuestionario para ${name}`, 10, 10);
+            doc.text(dateTime, 10, 20);
+            doc.text(`Puntuación: ${score}/10`, 10, 30);
+            doc.text("Respuestas:", 10, 40);
+            doc.text(answers, 10, 50);
+
+            doc.save(`resultados_cuestionario_${name}.pdf`);
+        }
+
+        function validateForm() {
+            const questions = document.querySelectorAll('.question');
+            for (let i = 0; i < questions.length; i++) {
+                const selectedOption = questions[i].querySelector('input:checked');
+                if (!selectedOption) {
+                    alert(`Por favor, responde la pregunta ${i + 1}.`);
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            const form = document.getElementById('quizForm');
+            form.addEventListener('submit', function(event) {
+                event.preventDefault();
+                if (validateForm()) {
+                    showResults();
+                    document.getElementById('showResultsBtn').disabled = true; // Deshabilitar el botón de mostrar resultados después de enviar respuestas
+                }
+            });
+        });
+    </script>
+</body>
+</html>

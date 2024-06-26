@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cuestionario de Enfermería</title>
+    <link rel="stylesheet" href="styles.css"> <!-- Enlace al archivo CSS externo -->
+</head>
+<body>
+    <div class="container">
+        <h1>Cuestionario de Enfermería</h1>
+        <form id="quizForm">
+            <label for="name">Nombre:</label>
+            <input type="text" id="name" name="name" required>
+            
+            <div class="question">
+                <p>1. ¿Qué es la enfermería?</p>
+                <label><input type="radio" name="q1" value="a"> a) Es el cuidado de la salud de una persona en su hogar.</label><br>
+                <label><input type="radio" name="q1" value="b"> b) Es la ciencia que se dedica al cuidado y atención de los enfermos y heridos, así como a otras tareas de asistencia sanitaria.</label><br>
+                <label><input type="radio" name="q1" value="c"> c) Es la administración de medicamentos en un hospital.</label><br>
+            </div>
+            
+            <div class="question">
+                <p>2. ¿Cuál es una de las funciones principales de una enfermera/o?</p>
+                <label><input type="radio" name="q2" value="a"> a) Realizar diagnósticos médicos.</label><br>
+                <label><input type="radio" name="q2" value="b"> b) Brindar cuidados y apoyo emocional a los pacientes.</label><br>
+                <label><input type="radio" name="q2" value="c"> c) Realizar cirugías menores.</label><br>
+            </div>
+            
+            <div class="question">
+                <p>3. ¿Qué se entiende por cuidados paliativos en enfermería?</p>
+                <label><input type="radio" name="q3" value="a"> a) Son los cuidados que se brindan para tratar una enfermedad infecciosa.</label><br>
+                <label><input type="radio" name="q3" value="b"> b) Son los cuidados destinados a mejorar la calidad de vida de los pacientes con enfermedades terminales o crónicas.</label><br>
+                <label><input type="radio" name="q3" value="c"> c) Son los cuidados preventivos para evitar enfermedades contagiosas.</label><br>
+            </div>
+
+            <button type="button" id="showResultsBtn" onclick="showResults()">Ver resultados</button>
+
+            <div id="resultsContainer" class="result" style="display: none;">
+                <h2>Cuestionario de Enfermería - Resultados para <span id="resultName"></span></h2>
+                <p id="resultDateTime"></p>
+                <p id="resultScore"></p>
+                <h3>Respuestas incorrectas:</h3>
+                <ul id="incorrectAnswers"></ul>
+                <button type="button" class="download-btn" onclick="downloadPDF()">Descargar PDF</button>
+            </div>
+        </form>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
+    <script>
+        function showResults() {
+            const name = document.getElementById('name').value;
+            const q1 = document.querySelector('input[name="q1"]:checked');
+            const q2 = document.querySelector('input[name="q2"]:checked');
+            const q3 = document.querySelector('input[name="q3"]:checked');
+            const showResultsBtn = document.getElementById('showResultsBtn');
+
+            if (!name || !q1 || !q2 || !q3) {
+                alert('Por favor responde todas las preguntas y proporciona tu nombre.');
+                return;
+            }
+
+            // Calcular calificación
+            let score = 0;
+            if (q1.value === 'b') score++;
+            if (q2.value === 'b') score++;
+            if (q3.value === 'b') score++;
+            const totalQuestions = 3;
+            const percentage = (score / totalQuestions) * 100;
+
+            // Crear objeto con los detalles de la calificación
+            const quizResult = {
+                name: name,
+                score: score,
+                totalQuestions: totalQuestions,
+                percentage: percentage.toFixed(2),
+                dateTime: new Date().toLocaleString(),
+                incorrectAnswers: []
+            };
+
+            // Detectar respuestas incorrectas
+            if (q1.value !== 'b') {
+                quizResult.incorrectAnswers.push({
+                    question: "1. ¿Qué es la enfermería?",
+                    correctAnswer: "b",
+                    userAnswer: q1.value
+                });
+            }
+            if (q2.value !== 'b') {
+                quizResult.incorrectAnswers.push({
+                    question: "2. ¿Cuál es una de las funciones principales de una enfermera/o?",
+                    correctAnswer: "b",
+                    userAnswer: q2.value
+                });
+            }
+            if (q3.value !== 'b') {
+                quizResult.incorrectAnswers.push({
+                    question: "3. ¿Qué se entiende por cuidados paliativos en enfermería?",
+                    correctAnswer: "b",
+                    userAnswer: q3.value
+                });
+            }
+
+            // Mostrar resultados en la página
+            document.getElementById('resultName').textContent = quizResult.name;
+            document.getElementById('resultDateTime').textContent = `Fecha y Hora: ${quizResult.dateTime}`;
+            document.getElementById('resultScore').textContent = `Calificación: ${quizResult.score}/${quizResult.totalQuestions} (${quizResult.percentage}%)`;
+
+            const incorrectAnswersList = document.getElementById('incorrectAnswers');
+            incorrectAnswersList.innerHTML = '';
+            quizResult.incorrectAnswers.forEach(answer => {
+                const li = document.createElement('li');
+                li.textContent = `${answer.question}: Tu respuesta: ${answer.userAnswer}. Respuesta correcta: ${answer.correctAnswer}`;
+                incorrectAnswersList.appendChild(li);
+            });
+
+            // Mostrar contenedor de resultados
+            const resultsContainer = document.getElementById('resultsContainer');
+            resultsContainer.style.display = 'block';
+
+            // Desactivar botón de mostrar resultados
+            showResultsBtn.disabled = true;
+        }
+
+        function downloadPDF() {
+            const { jsPDF } = window.jspdf;
+            const name = document.getElementById('resultName').textContent;
+            const dateTime = document.getElementById('resultDateTime').textContent;
+            const score = document.getElementById('resultScore').textContent;
+            const incorrectAnswers = Array.from(document.getElementById('incorrectAnswers').getElementsByTagName('li')).map(item => item.textContent);
+
+            const doc = new jsPDF();
+
+            // Ajustar tamaño de fuente
+            const fontSize = 10; // Tamaño de fuente deseado
+
+            doc.setFontSize(18);
+            doc.text(20, 20, `Cuestionario de Enfermería - Resultado para ${name}`);
+            
+            doc.setFontSize(14);
+            doc.text(20, 30, dateTime);
+            doc.text(20, 40, score);
+
+            doc.setFontSize(fontSize); // Aplicar tamaño de fuente deseado
+
+            doc.text(20, 50, 'Respuestas incorrectas:');
+            let yPos = 60;
+            incorrectAnswers.forEach(answer => {
+                doc.text(20, yPos, `${answer}`);
+                yPos += 10;
+                if (yPos > 280) {
+                    doc.addPage();
+                    yPos = 20;
+                }
+            });
+
+            doc.save(`Resultado_Cuestionario_Enfermeria_${name}.pdf`);
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cuestionario de Médicos</title>
+    <link rel="stylesheet" href="styles.css"> <!-- Enlace al archivo CSS externo -->
+</head>
+<body>
+    <div class="container">
+        <h1>Cuestionario de Médicos</h1>
+        <form id="quizForm">
+            <label for="name">Nombre:</label>
+            <input type="text" id="name" name="name" required>
+            
+            <div class="question">
+                <p>1. ¿Qué estudia la medicina general?</p>
+                <label><input type="radio" name="q1" value="a"> a) Estudio de enfermedades mentales.</label><br>
+                <label><input type="radio" name="q1" value="b"> b) Estudio de la salud y enfermedades del cuerpo humano en general.</label><br>
+                <label><input type="radio" name="q1" value="c"> c) Estudio de las plantas medicinales.</label><br>
+            </div>
+            
+            <div class="question">
+                <p>2. ¿Cuál es la función principal del corazón?</p>
+                <label><input type="radio" name="q2" value="a"> a) Producir hormonas.</label><br>
+                <label><input type="radio" name="q2" value="b"> b) Bombear sangre a través del cuerpo.</label><br>
+                <label><input type="radio" name="q2" value="c"> c) Filtrar toxinas.</label><br>
+            </div>
+            
+            <div class="question">
+                <p>3. ¿Qué es un electrocardiograma?</p>
+                <label><input type="radio" name="q3" value="a"> a) Un examen de la vista.</label><br>
+                <label><input type="radio" name="q3" value="b"> b) Un estudio que registra la actividad eléctrica del corazón.</label><br>
+                <label><input type="radio" name="q3" value="c"> c) Un análisis de sangre.</label><br>
+            </div>
+
+            <button type="button" id="showResultsBtn" onclick="showResults()">Ver resultados</button>
+
+            <div id="resultsContainer" class="result" style="display: none;">
+                <h2>Cuestionario de Médicos - Resultados para <span id="resultName"></span></h2>
+                <p id="resultDateTime"></p>
+                <p id="resultScore"></p>
+                <h3>Respuestas incorrectas:</h3>
+                <ul id="incorrectAnswers"></ul>
+                <button type="button" class="download-btn" onclick="downloadPDF()">Descargar PDF</button>
+            </div>
+        </form>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
+    <script>
+        function showResults() {
+            const name = document.getElementById('name').value;
+            const q1 = document.querySelector('input[name="q1"]:checked');
+            const q2 = document.querySelector('input[name="q2"]:checked');
+            const q3 = document.querySelector('input[name="q3"]:checked');
+            const showResultsBtn = document.getElementById('showResultsBtn');
+
+            if (!name || !q1 || !q2 || !q3) {
+                alert('Por favor responde todas las preguntas y proporciona tu nombre.');
+                return;
+            }
+
+            // Calcular calificación
+            let score = 0;
+            if (q1.value === 'b') score++;
+            if (q2.value === 'b') score++;
+            if (q3.value === 'b') score++;
+            const totalQuestions = 3;
+            const percentage = (score / totalQuestions) * 100;
+
+            // Crear objeto con los detalles de la calificación
+            const quizResult = {
+                name: name,
+                score: score,
+                totalQuestions: totalQuestions,
+                percentage: percentage.toFixed(2),
+                dateTime: new Date().toLocaleString(),
+                incorrectAnswers: []
+            };
+
+            // Detectar respuestas incorrectas
+            if (q1.value !== 'b') {
+                quizResult.incorrectAnswers.push({
+                    question: "1. ¿Qué estudia la medicina general?",
+                    correctAnswer: "b",
+                    userAnswer: q1.value
+                });
+            }
+            if (q2.value !== 'b') {
+                quizResult.incorrectAnswers.push({
+                    question: "2. ¿Cuál es la función principal del corazón?",
+                    correctAnswer: "b",
+                    userAnswer: q2.value
+                });
+            }
+            if (q3.value !== 'b') {
+                quizResult.incorrectAnswers.push({
+                    question: "3. ¿Qué es un electrocardiograma?",
+                    correctAnswer: "b",
+                    userAnswer: q3.value
+                });
+            }
+
+            // Mostrar resultados en la página
+            document.getElementById('resultName').textContent = quizResult.name;
+            document.getElementById('resultDateTime').textContent = `Fecha y Hora: ${quizResult.dateTime}`;
+            document.getElementById('resultScore').textContent = `Calificación: ${quizResult.score}/${quizResult.totalQuestions} (${quizResult.percentage}%)`;
+
+            const incorrectAnswersList = document.getElementById('incorrectAnswers');
+            incorrectAnswersList.innerHTML = '';
+            quizResult.incorrectAnswers.forEach(answer => {
+                const li = document.createElement('li');
+                li.textContent = `${answer.question}: Tu respuesta: ${answer.userAnswer}. Respuesta correcta: ${answer.correctAnswer}`;
+                incorrectAnswersList.appendChild(li);
+            });
+
+            // Mostrar contenedor de resultados
+            const resultsContainer = document.getElementById('resultsContainer');
+            resultsContainer.style.display = 'block';
+
+            // Desactivar botón de mostrar resultados
+            showResultsBtn.disabled = true;
+        }
+
+        function downloadPDF() {
+            const { jsPDF } = window.jspdf;
+            const name = document.getElementById('resultName').textContent;
+            const dateTime = document.getElementById('resultDateTime').textContent;
+            const score = document.getElementById('resultScore').textContent;
+            const incorrectAnswers = Array.from(document.getElementById('incorrectAnswers').getElementsByTagName('li')).map(item => item.textContent);
+
+            const doc = new jsPDF();
+
+            // Ajustar tamaño de fuente
+            const fontSize = 10; // Tamaño de fuente deseado
+
+            doc.setFontSize(18);
+            doc.text(20, 20, `Cuestionario de Médicos - Resultado para ${name}`);
+            
+            doc.setFontSize(14);
+            doc.text(20, 30, dateTime);
+            doc.text(20, 40, score);
+
+            doc.setFontSize(fontSize); // Aplicar tamaño de fuente deseado
+
+            doc.text(20, 50, 'Respuestas incorrectas:');
+            let yPos = 60;
+            incorrectAnswers.forEach(answer => {
+                doc.text(20, yPos, `${answer}`);
+                yPos += 10;
+                if (yPos > 280) {
+                    doc.addPage();
+                    yPos = 20;
+                }
+            });
+
+            doc.save(`Resultado_Cuestionario_Médicos_${name}.pdf`);
+        }
+    </script>
+</body>
+</html>
